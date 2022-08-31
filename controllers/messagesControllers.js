@@ -1,7 +1,11 @@
 const messages = require("../models/messagesEmail")
+
+const { Socket } = require("../middleware/socket.service")
+
 const getMsg = async (req, res) => {
   try {
     const msg = await messages.find()
+    Socket.emit("send-message", msg)
     res.json(msg)
   } catch (error) {
     console.log(error)
@@ -12,6 +16,7 @@ const getMsg = async (req, res) => {
 const getMsgByUserId = async (req, res) => {
   try {
     const msg = await messages.find({ userReceive: req.params.id })
+
     res.json(msg)
   } catch (error) {
     console.log(error)
@@ -27,6 +32,8 @@ const addMsg = async (req, res) => {
       userReceive,
     })
     await newMsg.save()
+    const allMessages = await messages.find()
+    Socket.emit("send-message", allMessages)
     // socket.emit("notification", newMsg)
     res.json(newMsg)
   } catch (error) {
