@@ -4,7 +4,7 @@ const messagesRouters = express.Router()
 
 messagesRouters.get("/", getMsg)
 
-messagesRouters.get("/:id", getMsgByUserId)
+messagesRouters.post("/:id", getMsgByUserId)
 
 messagesRouters.post("/", addMsg)
 
